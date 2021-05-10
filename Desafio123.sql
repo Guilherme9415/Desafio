@@ -1,19 +1,19 @@
-﻿CREATE DATABASE Desafio​123;
+CREATE DATABASE Desafio​123;
 ​
 USE Desafio​123;
 
 CREATE TABLE Raca (
-  Id INT PRIMARY KEY IDENTITY(1,1),  -- IDENTITY(1,1) ? NOT NULL ? 
+  Id INT PRIMARY KEY IDENTITY(1,1),  
   Nome VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Classe (
-  Id INT PRIMARY KEY IDENTITY(1,1), -- IDENTITY ? NOT NULL ?
+  Id INT PRIMARY KEY IDENTITY(1,1), 
   Descricao VARCHAR(600) NOT NULL
 );
 
 CREATE TABLE Personagem (
-  Id INT PRIMARY KEY IDENTITY(1,1), -- IDENTITY ? NOT NULL ?
+  Id INT PRIMARY KEY IDENTITY(1,1), 
   Raca_Id INT,
   Classe_Id INT,
   Nome VARCHAR(100),
@@ -25,7 +25,7 @@ CREATE TABLE Personagem (
 );
 
 CREATE TABLE InfoRaca (
-  Id INT PRIMARY KEY IDENTITY(1,1), -- IDENTITY ? NOT NULL ?
+  Id INT PRIMARY KEY IDENTITY(1,1), 
   Raca_Id INT,
   Id_Raca INT,
   Descricao	Varchar(500),
@@ -86,27 +86,42 @@ VALUES (1,1,'são uma raça guerreira que foi quase toda extinta por Freeza ante
  SELECT* FROM Raca;
    
 -- 01
-SELECT * 
-FROM Personagem INNER JOIN Raca ON Personagem.Raca_Id = Raca.Id
-WHERE PoworLevel < 1000 AND Raca.Nome = 'Shin-jin';
+    SELECT p."Id",
+           p."Classe_Id",
+	   p."Nome"
+    FROM Personagem p
+	  INNER JOIN Raca
+	     ON p.Raca_Id = Raca.Id
+    WHERE PoworLevel < 1000 AND  Raca.Nome = 'Shin-jin';
 
-SELECT * 
-FROM Personagem INNER JOIN Raca ON Personagem.Raca_Id = Raca.Id
-WHERE PoworLevel < 1000 AND Raca.Nome LIKE '%Shin-jin%';
+
+    SELECT p."Id",
+           p."Classe_Id",
+	   p."Nome"
+    FROM Personagem p
+	  INNER JOIN Raca
+	    ON p.Raca_Id = Raca.Id
+    WHERE PoworLevel < 1000 AND Raca.Nome LIKE '%Shin-jin%';
 	
+
 -- 02
-SELECT TOP 5 NOME, PoworLevel FROM (
-	SELECT Raca.Nome, Personagem.PoworLevel
-	FROM Personagem INNER JOIN Raca ON Personagem.Raca_Id = Raca.Id
-	WHERE PoworLevel BETWEEN 3000 AND 5000 
-) AS tb_1
-ORDER BY PoworLevel DESC;
+  SELECT TOP 5 NOME, PoworLevel FROM (
+
+    SELECT p."Nome",
+	   p."PoworLevel"
+    FROM Personagem p
+	  INNER JOIN Raca 
+	     ON p.Raca_Id = Raca.Id
+   WHERE p.PoworLevel BETWEEN 3000 AND 5000 
+
+)  AS tb_1 ORDER BY PoworLevel DESC;
+
 
 -- 03
-SELECT
-	p.Nome AS Personagem, 
-	r.Nome AS Raca, 
-	ir.Descricao,
+ SELECT
+	  p.Nome AS Personagem, 
+	  r.Nome AS Raca, 
+	  ir.Descricao,
 	(
 		CASE
 			WHEN p.PoworLevel > 8000 
@@ -115,11 +130,18 @@ SELECT
         END
 	) AS Mensagem, 
 	p.PoworLevel 
-FROM Personagem p
-	INNER JOIN Raca r ON r.Id = p.Raca_Id 
-	INNER JOIN InfoRaca ir  ON ir.Raca_Id = r.Id;
+ FROM Personagem p
+	INNER JOIN Raca r 
+	   ON r.Id = p.Raca_Id 
+	INNER JOIN InfoRaca ir  
+	   ON ir.Raca_Id = r.Id;
+
 
 -- 04
-SELECT *
-FROM Personagem p INNER JOIN Raca r ON p.Raca_Id = r.Id
-WHERE r.Nome = 'Androide';
+  SELECT r."Id",
+	 r."Nome",
+	 p."Raca_Id"
+  FROM Personagem p
+   INNER JOIN Raca r
+     ON p.Raca_Id = r.Id
+  WHERE r.Nome = 'Androide';
